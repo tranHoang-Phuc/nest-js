@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Query, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import type { Request, Response } from 'express';
 
@@ -7,19 +7,13 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @HttpCode(HttpStatus.NO_CONTENT)
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Get(':id')
-  fetchConfig(@Req() req: Request, @Res() res: Response) {
-    const { id } = req.params;
-    const queryParams = req.query;
-    const userAgent = req.headers['user-agent'];
-    return res.send(`<script>
-        console.log("id: ", ${id});
-        console.log("queryParams: ", ${JSON.stringify(queryParams)});
-        console.log("User Agent: ", '${userAgent}');
-      </script>`);
+  @Get('fetchQuery')
+  fetchQuery(@Query('name') name:string) {
+    return `Name: ${name}`;
   }
 }
