@@ -1,4 +1,13 @@
-import { Controller, Get, HttpCode, HttpStatus, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import type { Request, Response } from 'express';
 
@@ -13,7 +22,13 @@ export class AppController {
   }
 
   @Get('fetchQuery')
-  fetchQuery(@Query('name') name:string) {
+  fetchQuery(@Query('name') name: string) {
     return `Name: ${name}`;
+  }
+
+  @Post()
+  createMsg(@Body() msg: string) {
+    console.log(msg);
+    return 'Message receive successfully';
   }
 }

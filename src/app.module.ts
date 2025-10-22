@@ -1,14 +1,16 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './products/products.controller';
-import { ProductsService } from './products/products.service';
-import { ProductsModule } from './products/products.module';
-import { AuthController } from './auth/auth.controller';
+import { TokenMiddleware } from './middleware/token.middleware';
+import { ContentTypeMiddleware } from './middleware/content-type/content-type.middleware';
 
 @Module({
-  imports: [ProductsModule],
-  controllers: [AppController, ProductsController, AuthController],
-  providers: [AppService, ProductsService],
+  imports: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContentTypeMiddleware).forRoutes('token');
+  }
+}
